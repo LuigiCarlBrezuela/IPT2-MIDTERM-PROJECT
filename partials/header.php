@@ -1,3 +1,10 @@
+<?php
+session_start();
+
+// Assuming you have stored user data in the session
+$user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -77,37 +84,47 @@
 
         <li class="nav-item dropdown pe-3">
 
-          <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+          <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown" aria-expanded="false">
             <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
-            <span class="d-none d-md-block dropdown-toggle ps-2">J. Dela Cruz</span>
-          </a><!-- End Profile Iamge Icon -->
+            <span class="d-none d-md-block dropdown-toggle ps-2"><?php echo $user ? $user['name'] : 'Guest'; ?></span>
+          </a>
+          
+          <!-- End Profile Image Icon -->
 
           <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
-            <li class="dropdown-header">
-              <h6>Juan Dela Cruz</h6>
-              <span>Web Designer</span>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
+            <?php if ($user): ?>
+              <li class="dropdown-header">
+                <h6><?php echo $user['name']; ?></h6>
+                <span><?php echo $user['role']; ?></span>
+              </li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
 
-            <li>
-              <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
-                <i class="bi bi-person"></i>
-                <span>My Profile</span>
-              </a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center" href="index.php?action=profile">
+                  <i class="bi bi-person"></i>
+                  <span>My Profile</span>
+                </a>
+              </li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
 
-            <li>
-              <a class="dropdown-item d-flex align-items-center" href="#">
-                <i class="bi bi-box-arrow-right"></i>
-                <span>Sign Out</span>
-              </a>
-            </li>
-
+              <li>
+                <a class="dropdown-item d-flex align-items-center" href="index.php?action=logout">
+                  <i class="bi bi-box-arrow-right"></i>
+                  <span>Sign Out</span>
+                </a>
+              </li>
+            <?php else: ?>
+              <li>
+                <a class="dropdown-item d-flex align-items-center" href="login.php">
+                  <i class="bi bi-box-arrow-in-right"></i>
+                  <span>Sign In</span>
+                </a>
+              </li>
+            <?php endif; ?>
           </ul><!-- End Profile Dropdown Items -->
         </li><!-- End Profile Nav -->
 
@@ -115,3 +132,5 @@
     </nav><!-- End Icons Navigation -->
 
   </header><!-- End Header -->
+</body>
+</html>
