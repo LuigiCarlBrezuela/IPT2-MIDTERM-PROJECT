@@ -1,25 +1,42 @@
 <?php
-  include('partials\header.php');
-  include('partials\sidebar.php');
-  include('database/database.php'); // Include the database connection file
-  
+include('partials/header.php');
+include('partials/sidebar.php');
+include('database/database.php'); // Include the database connection file
 
-  // Fetch movie data
-  // Fetch movie datas from the databases
+// Define how many results you want per page
+$results_per_page = 5;
 
-  $sql = "SELECT * FROM movies";
-  $movies = $conn->query($sql);
+// Find out the number of results stored in the database
+$sql = "SELECT COUNT(*) AS total FROM movies";
+$result = $conn->query($sql);
+$row = $result->fetch_assoc();
+$total_results = $row['total'];
 
-  // Check for query execution errors
-  if ($movies === false) {
-      die("Error executing query: " . $conn->error);
-  }
+// Determine the total number of pages available
+$total_pages = ceil($total_results / $results_per_page);
+
+// Determine which page number visitor is currently on
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+if ($page < 1) $page = 1;
+if ($page > $total_pages) $page = $total_pages;
+
+// Determine the SQL LIMIT starting number for the results on the displaying page
+$start_from = ($page - 1) * $results_per_page;
+
+// Retrieve the selected results from the database
+$sql = "SELECT * FROM movies LIMIT $start_from, $results_per_page";
+$movies = $conn->query($sql);
+
+// Check for query execution errors
+if ($movies === false) {
+    die("Error executing query: " . $conn->error);
+}
 ?>
 
 <main id="main" class="main">
 
   <div class="pagetitle">
-    <h1> Movie Information Management System</h1>
+    <h1>Movie Information Management System</h1>
     <nav>
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="index.php">Home</a></li>
@@ -44,7 +61,6 @@
               </div>
             </div>
 
-           
             <!-- Default Table -->
             <table class="table" id="myTable">
               <thead>
@@ -176,11 +192,29 @@
           <div class="mx-4">
             <nav aria-label="Page navigation example">
               <ul class="pagination">
-                <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                <li class="page-item<?php if ($page <= 1) echo ' disabled'; ?>">
+                  <a class="page-link" href="<?php if ($page > 1) echo 'index.php?page=' . ($page - 1); ?>" tabindex="-1">Previous</a>
+                </li>
+
+                <?php
+                $start_page = max(1, $page - 2);
+                $end_page = min($total_pages, $page + 2);
+
+                if ($page <= 3) {
+                  $start_page = 1;
+                  $end_page = min(5, $total_pages);
+                } elseif ($page > $total_pages - 3) {
+                  $start_page = max(1, $total_pages - 4);
+                  $end_page = $total_pages;
+                }
+
+                for ($i = $start_page; $i <= $end_page; $i++): ?>
+                  <li class="page-item<?php if ($i == $page) echo ' active'; ?>"><a class="page-link" href="index.php?page=<?php echo $i; ?>"><?php echo $i; ?><?php if ($i == $page) echo ' <span class="sr-only"></span>'; ?></a></li>
+                <?php endfor; ?>
+
+                <li class="page-item<?php if ($page >= $total_pages) echo ' disabled'; ?>">
+                  <a class="page-link" href="<?php if ($page < $total_pages) echo 'index.php?page=' . ($page + 1); ?>">Next</a>
+                </li>
               </ul>
             </nav>
           </div>
@@ -230,7 +264,7 @@
 
 </main><!-- End #main -->
 <?php
-include('partials\footer.php');
+include('partials/footer.php');
 ?>
 
 

@@ -1,16 +1,15 @@
 <?php
-    $servername = "localhost";
-    $db_name = "ipt2_midterm_project";
-    $username = "root";
-    $password = "";
+$servername = "localhost";
+$db_name = "ipt2_midterm_project";
+$username = "root";
+$password = "";
 
-    // Create connection
-    $conn = new mysqli($servername, $username, $password, $db_name);
+// Create connection
+$conn = new mysqli($servername, $username, $password, $db_name);
 
-    // Check connection
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    } else {
-        echo "Connected successfully";
-    }
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+// Remove any echo statements that indicate a successful connection
 ?>
