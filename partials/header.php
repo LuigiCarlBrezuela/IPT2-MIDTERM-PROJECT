@@ -2,10 +2,13 @@
 <html lang="en">
 
 <head>
-  <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Tables / General - NiceAdmin Bootstrap Template</title>
+  <title>Movie Information Management System</title>
+  <link rel="stylesheet" href="path/to/your/css/file.css">
+  <script src="path/to/your/script.js"></script>
+
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -57,8 +60,8 @@
     </div><!-- End Logo -->
 
     <div class="search-bar">
-      <form class="search-form d-flex align-items-center" method="POST" action="#">
-        <input type="text" name="query" placeholder="Search" title="Enter search keyword">
+      <form class="search-form d-flex align-items-center" method="POST" action="javascript:void(0);">
+        <input type="text" id="myInput" onkeyup="searchTable()" name="query" placeholder="Search" title="Enter search keyword">
         <button type="submit" title="Search"><i class="bi bi-search"></i></button>
       </form>
     </div><!-- End Search Bar -->
