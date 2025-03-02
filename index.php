@@ -3,7 +3,7 @@
   include('partials\sidebar.php');
   include('database/database.php'); // Include the database connection file
   
-  // Fetch movie data
+  // Fetch movie datas from the databases
   $sql = "SELECT * FROM movies";
   $movies = $conn->query($sql);
 
